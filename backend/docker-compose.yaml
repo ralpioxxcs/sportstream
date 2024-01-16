@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: sportstream-pg
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: sportstream
+      POSTGRES_PASSWORD: sportstream 
+      POSTGRES_DB: sportstream
+    volumes:
+      - ./pg-data/:/var/lib/postgresql/data

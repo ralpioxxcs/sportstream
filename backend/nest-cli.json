@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/sportstream/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/sportstream/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/sportstream",
+  "projects": {
+    "sportstream": {
+      "type": "application",
+      "root": "apps/sportstream",
+      "entryFile": "main",
+      "sourceRoot": "apps/sportstream/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/sportstream/tsconfig.app.json"
+      }
+    },
+    "auth-service": {
+      "type": "application",
+      "root": "apps/auth-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/auth-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/auth-service/tsconfig.app.json"
+      }
+    },
+    "user-management": {
+      "type": "application",
+      "root": "apps/user-management",
+      "entryFile": "main",
+      "sourceRoot": "apps/user-management/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user-management/tsconfig.app.json"
+      }
+    },
+    "entity": {
+      "type": "library",
+      "root": "libs/entity",
+      "entryFile": "index",
+      "sourceRoot": "libs/entity/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/entity/tsconfig.lib.json"
+      }
+    },
+    "api-gateway": {
+      "type": "application",
+      "root": "apps/api-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
+      }
+    },
+    "utils": {
+      "type": "library",
+      "root": "libs/utils",
+      "entryFile": "index",
+      "sourceRoot": "libs/utils/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/utils/tsconfig.lib.json"
+      }
+    }
+  }
+}
