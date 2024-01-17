@@ -3,10 +3,6 @@ import {
   Module,
   ValidationPipe,
 } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { HttpModule } from '@nestjs/axios';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
@@ -17,22 +13,13 @@ import {
   ENV_DB_USERNAME_KEY,
 } from './const/env-keys.consts';
 import { UserModel } from '@app/entity/user.entity';
-import { JwtModule } from '@nestjs/jwt';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { LocalStrategy } from './strategies/local.strategy';
-import { HttpStrategy } from './strategies/http.strategy';
-import { JwtStrategy } from './strategies/jwt.strategy';
 import { GithubModule } from './oauth/github/github.module';
+import { GoogleModule } from './oauth/google/google.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    HttpModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: `${__dirname}/../.env`,
-    }),
-    UsersModule,
-    JwtModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env[ENV_DB_HOST_KEY],
@@ -45,13 +32,11 @@ import { GithubModule } from './oauth/github/github.module';
       logging: true,
     }),
     GithubModule,
+    GoogleModule,
+    AuthModule,
+    UsersModule,
   ],
-  controllers: [AuthController],
   providers: [
-    AuthService,
-    LocalStrategy,
-    HttpStrategy,
-    JwtStrategy,
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
@@ -62,4 +47,4 @@ import { GithubModule } from './oauth/github/github.module';
     },
   ],
 })
-export class AuthModule {}
+export class AuthServiceModule {}

@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserModel } from '@app/entity/user.entity';
-import { SignUpUserDto } from './dto/signup-user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { SignUpUserDto } from '../dto/signup-user.dto';
 
 @Controller({
   path: 'auth',

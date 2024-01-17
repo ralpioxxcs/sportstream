@@ -1,8 +1,7 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { BasicStrategy } from 'passport-http';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../auth/auth.service';
 import { Injectable, Param, UnauthorizedException } from '@nestjs/common';
-import { Request } from 'express';
 import { HttpPayloadType } from './types/http-payload.type';
 
 @Injectable()

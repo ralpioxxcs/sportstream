@@ -3,23 +3,22 @@ import {
   HttpStatus,
   Injectable,
   Logger,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { EmailLoginDto } from './dto/email-login.dto';
 import { UserModel } from '@app/entity/user.entity';
-import { UsersService } from './users/users.service';
+import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { SignUpUserDto } from './dto/signup-user.dto';
+import { SignUpUserDto } from '../dto/signup-user.dto';
 import {
   ENV_JWT_REFRESH_SECRET,
   ENV_JWT_REFRESH_TOKEN_EXPIRES_IN,
   ENV_JWT_SECRET,
   ENV_JWT_TOKEN_EXPIRES_IN,
-} from './const/env-keys.consts';
-import { RolesEnum } from './const/roles.consts';
-import { SocialInterface } from './interfaces/social.interface';
+} from '../const/env-keys.consts';
+import { EmailLoginDto } from '../dto/email-login.dto';
+import { RolesEnum } from '../const/roles.consts';
+import { SocialInterface } from '../interfaces/social.interface';
 
 @Injectable()
 export class AuthService {
@@ -43,11 +42,22 @@ export class AuthService {
     };
   }
 
-  async loginSocialUser(authProvider: string, socialData: SocialInterface) {}
-
   async registerWithEmail(signUpUserDto: SignUpUserDto): Promise<UserModel> {
     return await this.userService.createUser({
       ...signUpUserDto,
+      role: RolesEnum.USER,
+    });
+  }
+
+  async registerWithSocial(
+    authProvider: string,
+    socialData: SocialInterface,
+  ): Promise<UserModel> {
+    return await this.userService.createUser({
+      name: socialData.name,
+      email: socialData.email,
+      oauthProvider: authProvider,
+      oauthUserId: socialData.id,
       role: RolesEnum.USER,
     });
   }
