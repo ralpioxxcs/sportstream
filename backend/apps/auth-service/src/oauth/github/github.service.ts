@@ -26,7 +26,7 @@ export class GithubService {
   github_auth_endpoint = 'https://github.com/login/oauth/access_token';
   github_user_endpoint = 'https://api.github.com/user';
 
-  async getProfileByToken(loginDto: GithubLoginDto): Promise<SocialInterface> {
+  async getProfileByCode(loginDto: GithubLoginDto): Promise<SocialInterface> {
     let { data } = await firstValueFrom(
       this.httpService
         .post(
@@ -79,9 +79,11 @@ export class GithubService {
 
     const user = response.data;
 
+    // TODO: firstname, lastname exception
     return {
       id: user['id'],
       email: user['email'],
+      name: user['name'],
     };
   }
 }

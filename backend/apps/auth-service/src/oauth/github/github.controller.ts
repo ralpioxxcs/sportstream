@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { GithubLoginDto } from './dto/github-login.dto';
 import { GithubService } from './github.service';
-import { AuthService } from '../../auth.service';
+import { UsersService } from '../../users/users.service';
+import { UserModel } from '@app/entity/user.entity';
+import { AuthService } from '../../auth/auth.service';
 
 @Controller({
   path: 'auth/oauth/github',
@@ -19,21 +21,29 @@ export class GithubController {
   constructor(
     private readonly githubService: GithubService,
     private readonly authService: AuthService,
+    private readonly userService: UsersService,
   ) {}
 
   @Get('callback')
   @HttpCode(HttpStatus.OK)
-  async loginGithub(@Query('code') code: string) {
+  async callback(@Query('code') code: string) {
     return code;
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: GithubLoginDto) {
-    console.log(loginDto);
+    const socialData = await this.githubService.getProfileByCode(loginDto);
+    console.log(socialData);
 
-    const socialData = await this.githubService.getProfileByToken(loginDto);
+    let user: UserModel;
+    user = await this.userService.getUserByEmail(socialData.email);
+    console.log(user);
 
-    return this.authService.loginSocialUser('github', socialData);
+    if (!user) {
+      console.log('not exists user, create new');
+      user = await this.authService.registerWithSocial('github', socialData);
+    }
+    return this.authService.loginUser(user);
   }
 }

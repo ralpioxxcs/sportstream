@@ -28,15 +28,21 @@ export class UsersService {
       );
     }
 
-    // Hashing password
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+    let userPayload: Partial<UserModel>;
+    if (createUserDto.password) {
+      // Hashing password
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
 
-    // clone
-    const userPayload = {
-      ...createUserDto,
-      password: hashedPassword,
-    };
+      userPayload = {
+        ...createUserDto,
+        password: hashedPassword,
+      };
+    } else {
+      userPayload = {
+        ...createUserDto,
+      };
+    }
 
     const userObject = this.userRepostiroy.create(userPayload);
     return await this.userRepostiroy.save(userObject);

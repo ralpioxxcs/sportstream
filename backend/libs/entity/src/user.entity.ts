@@ -18,7 +18,9 @@ export class UserModel extends BaseModel {
   @Exclude({
     toPlainOnly: true,
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   password: string;
 
   @Column({
